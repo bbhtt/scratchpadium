@@ -1,0 +1,48 @@
+{{- define "main" -}}
+<div class="article-container">
+  {{- partial "article-header.html" . -}}
+
+  {{- $rawHTML := .Content -}}
+  {{- $parts := split $rawHTML "<h4" -}}
+
+  {{- $intro := index $parts 0 -}}
+  {{- if $intro -}}
+    <div class="microposts-intro markdown-body">{{- $intro | safeHTML -}}</div>
+  {{- end -}}
+
+  <ul class="microposts-feed">
+  {{- range $i, $part := $parts -}}
+    {{- if eq $i 0 -}}{{- continue -}}{{- end -}}
+
+    {{- $chunk := print "<h4" $part -}}
+
+    {{- $tsRaw := $chunk | replaceRE `(?s)^.*?<h4[^>]*>(.*?)</h4>.*$` "$1" -}}
+    {{- $ts    := $tsRaw | plainify -}}
+
+    {{- $body := $chunk | replaceRE `(?s)^.*?</h4>` "" -}}
+
+    {{- $tsClean := $tsRaw | replaceRE `<a[^>]*class="anchor"[^>]*>.*?</a>` "" | plainify -}}
+
+    <li class="micropost" id="post-{{- $tsClean | urlize -}}">
+      <p class="micropost-ts">
+        {{- $tsClean -}}
+        <a href="#post-{{- $tsClean | urlize -}}" title="permalink">#</a>
+      </p>
+      <div class="micropost-body markdown-body">
+        {{- $body | safeHTML -}}
+      </div>
+    </li>
+  {{- end -}}
+  </ul>
+
+  {{- partial "article-labels.html" . -}}
+  {{- partial "article-license.html" . -}}
+  {{- partial "article-author.html" . -}}
+  {{- partial "article-extra.html" . -}}
+</div>
+
+<div class="article bottom">
+  {{- partial "article-bottom-navigation.html" . -}}
+  {{- partial "article-comments.html" . -}}
+</div>
+{{- end -}}

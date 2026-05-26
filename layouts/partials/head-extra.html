@@ -1,1 +1,4 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+{{- if eq .Type "microposts" -}}
+  {{- partial "microposts-head.html" . -}}
+{{- end -}}

@@ -1,0 +1,5 @@
+{{- $css := resources.Get "css/microposts.css" -}}
+{{- if $css -}}
+  {{- $css = $css | resources.Minify | resources.Fingerprint "sha384" -}}
+  <link rel="stylesheet" href="{{- $css.RelPermalink -}}" integrity="{{- $css.Data.Integrity -}}">
+{{- end -}}
