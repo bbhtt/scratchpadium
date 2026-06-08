@@ -1,5 +1,6 @@
 {{- define "main" -}}
-{{- $paginator := .Paginator -}}
+{{- $pages := where .Pages "Params.unlisted" "!=" true -}}
+{{- $paginator := .Paginate $pages -}}
 
 <section class="article header"><h1>{{- .Title -}}</h1></section>
 {{- partial "section-body.html" . -}}

@@ -34,7 +34,9 @@
 {{- partial "rss-feed.html" . -}}
 {{- partial "twitter-card.html" . -}}
 {{- partial "opengraph.html" . -}}
-{{- if .Params.Robots -}}
+{{- if eq .Params.unlisted true -}}
+<meta name="robots" content="noindex,nofollow">
+{{- else if .Params.Robots -}}
 <meta name="robots" content="{{ .Params.robots }}">
 {{- end -}}
 {{- partial "head-extra.html" . -}}
